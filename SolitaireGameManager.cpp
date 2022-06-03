@@ -11,15 +11,10 @@ namespace solitaire
 
 		initCardTable();
 
-
 		return S_OK;
 	}
 	void SolitaireGameManager::Release()
 	{
-		for (auto& e : mCardList)
-		{
-			e.reset();
-		}
 		mCardList.clear();
 		mspBackground.reset();
 		D2DFramework::Release();
@@ -33,7 +28,7 @@ namespace solitaire
 
 		for (auto& e : mCardList)
 		{
-			e->Draw();
+			e.Draw();
 		}
 
 		hr = mspRenderTarget->EndDraw();
@@ -46,34 +41,69 @@ namespace solitaire
 	}
 	void SolitaireGameManager::OnClick(float mouseX, float mouseY)
 	{
-		Card* pPrevCard;
+		Card* pCurCard = nullptr;
 		for (auto& e : mCardList)
 		{
-			if (e->IsClicked(mouseX, mouseY))
+			if (e.IsClicked(mouseX, mouseY))
 			{
-				if (pCurCard == nullptr)
-				{
-					pCurCard = e.get();
-					break;
-				}
-				else
-				{
-					pPrevCard = pCurCard;
-					pCurCard = e.get();
-
-					if (pCurCard->GetCardType() == pPrevCard->GetCardType())
-					{
-						
-					}
-
-
-				}
+				pCurCard = &e;
+				break;
 			}
 		}
 
+		if (pCurCard != nullptr)
+		{
+			if (pPrevCard == nullptr)
+			{
+				pPrevCard = pCurCard;
+			}
+			else
+			{
+				if (pCurCard->GetCardType() == pPrevCard->GetCardType() && pCurCard != pPrevCard)
+				{
 
+					Render();
+					Sleep(STOP_MILI_SEC);
+					std::stringstream ss;
+					OutputDebugStringA(ss.str().c_str());
+					mCardList.remove_if([&](Card& card) {
+						return card.GetIsFront() && pCurCard->GetIsFront() || card.GetIsFront() && pPrevCard->GetIsFront();
+						});
+					//mCardList.erase(std::remove_if(mCardList.begin(), mCardList.end(),
+					//	[&](auto& card)
+					//	{
+					//		return card.GetIdx() == pPrevCard->GetIdx();
+					//	}));
+					pPrevCard = nullptr;
+					if (mCardList.size() == 0)
+					{
+						MessageBoxA(mHwnd, "YOU WIN!!", "Victory", MB_OK);
+						initCardTable();
+						Render();
+					}
+				}
+				else
+				{
+					if (pCurCard == pPrevCard)
+					{
+						pPrevCard = nullptr;
+					}
+					else
+					{
+						Render();
+						Sleep(STOP_MILI_SEC);
+						pCurCard->Flip();
+						pPrevCard->Flip();
+						pPrevCard = nullptr;
+						Render();
+					}
 
+				}
+			}
+
+		}
 	}
+
 	void SolitaireGameManager::initCardTable()
 	{
 		mspBackground = std::make_unique<Actor>(this, BACKGROUND_FILENAME2);
@@ -117,9 +147,11 @@ namespace solitaire
 			drawXPos = 120.f;
 			for (int j = 0; j < MAX_COLUMN; ++j)
 			{
-				mCardList.push_back(std::make_unique<Card>(this, BACK_CARD, j * drawXPos + 40.f, i * drawYPos + 20.f, cardTypes[idx++]));
+				mCardList.push_back(Card(this, BACK_CARD, j * drawXPos + 40.f, i * drawYPos + 20.f, cardTypes[idx++]));
+
 			}
 		}
+
 	}
 
 

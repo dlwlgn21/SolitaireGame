@@ -82,18 +82,6 @@ namespace solitaire
         }
     }
 
-    void Card::Invalidate()
-    {
-        RECT rect{
-            static_cast<LONG>(mX),
-            static_cast<LONG>(mY),
-            static_cast<LONG>(mX + mpBackBitmapImg->GetPixelSize().width),
-            static_cast<LONG>(mY + mpBackBitmapImg->GetPixelSize().height)
-        };
-
-        InvalidateRect(mpFramework->GetWindowHandle(), &rect, false);
-    }
-
     void Card::Flip()
     {
         mBIsFront = !mBIsFront;

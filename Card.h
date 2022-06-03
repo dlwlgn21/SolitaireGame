@@ -26,9 +26,7 @@ namespace solitaire
 		bool IsClicked(float mouseX, float mouseY);
 		eCardType GetCardType() const;
 		bool GetIsFront() const;
-
 		void Draw() override;
-		void Invalidate();
 		void Flip();
 		
 	private:
