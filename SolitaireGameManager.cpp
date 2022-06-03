@@ -28,7 +28,7 @@ namespace solitaire
 
 		for (auto& e : mCardList)
 		{
-			e.Draw();
+			e->Draw();
 		}
 
 		hr = mspRenderTarget->EndDraw();
@@ -44,9 +44,9 @@ namespace solitaire
 		Card* pCurCard = nullptr;
 		for (auto& e : mCardList)
 		{
-			if (e.IsClicked(mouseX, mouseY))
+			if (e->IsClicked(mouseX, mouseY))
 			{
-				pCurCard = &e;
+				pCurCard = e.get();
 				break;
 			}
 		}
@@ -64,8 +64,8 @@ namespace solitaire
 
 					Render();
 					Sleep(STOP_MILI_SEC);
-					mCardList.remove_if([&](Card& card) {
-						return card.GetIsFront() && pCurCard->GetIsFront() || card.GetIsFront() && pPrevCard->GetIsFront();
+					mCardList.remove_if([&](auto& card) {
+						return card->GetIsFront() && pCurCard->GetIsFront() || card->GetIsFront() && pPrevCard->GetIsFront();
 						});
 					//mCardList.erase(std::remove_if(mCardList.begin(), mCardList.end(),
 					//	[&](auto& card)
@@ -145,7 +145,7 @@ namespace solitaire
 			drawXPos = 120.f;
 			for (int j = 0; j < MAX_COLUMN; ++j)
 			{
-				mCardList.push_back(Card(this, BACK_CARD, j * drawXPos + 40.f, i * drawYPos + 20.f, cardTypes[idx++]));
+				mCardList.push_back(std::make_unique<Card>(this, BACK_CARD, j * drawXPos + 40.f, i * drawYPos + 20.f, cardTypes[idx++]));
 
 			}
 		}

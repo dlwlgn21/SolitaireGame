@@ -28,7 +28,7 @@ namespace solitaire
 
 	private:
 		std::unique_ptr<Actor> mspBackground;
-		std::list<Card> mCardList;
+		std::list<std::unique_ptr<Card>> mCardList;
 
 		Card* pPrevCard = nullptr;
 
