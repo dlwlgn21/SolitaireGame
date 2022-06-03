@@ -8,7 +8,7 @@
 #include "D2DFramework.h"
 #include "ComException.h"
 
-namespace solatiare
+namespace solitaire
 {
 	class MyBitmapManager
 	{
@@ -18,9 +18,10 @@ namespace solatiare
 		HRESULT Initialize(ID2D1HwndRenderTarget* pRT);
 		void Release();
 
-		ID2D1Bitmap* LoadBitmap(std::wstring filename);
+		ID2D1Bitmap* LoadBitmapVersionTwo(std::wstring filename);
+	
 	private:
-		MyBitmapManager();
+		MyBitmapManager() = default;
 		MyBitmapManager(const MyBitmapManager& other);
 		MyBitmapManager& operator=(const MyBitmapManager& other) {}
 

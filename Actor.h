@@ -2,7 +2,7 @@
 #include <string>
 #include "D2DFramework.h"
 
-namespace solatiare
+namespace solitaire
 {
 	class Actor
 	{
@@ -12,6 +12,10 @@ namespace solatiare
 		virtual ~Actor();
 
 		virtual void Draw();
+
+		D2D_VECTOR_2F GetPosition() const;
+		void SetPosition(float x, float y);
+		void SetPosition(D2D_VECTOR_2F vector);
 
 	private:
 

@@ -3,7 +3,7 @@
 using namespace Microsoft::WRL;
 using namespace std;
 
-namespace solatiare
+namespace solitaire
 {
 	MyBitmapManager& MyBitmapManager::GetInstance()
 	{
@@ -53,6 +53,10 @@ namespace solatiare
 		ThrowIfFailed(hr, "Error while GetFrame()");
 
 		ComPtr<IWICFormatConverter> converter;
+		hr = mcpWICFactory->CreateFormatConverter(converter.GetAddressOf());
+		ThrowIfFailed(hr, "Error while CreateFormatConverter()");
+
+
 		hr = converter->Initialize(
 			frame.Get(),
 			GUID_WICPixelFormat32bppPBGRA,
@@ -83,7 +87,7 @@ namespace solatiare
 		mcpWICFactory.Reset();
 	}
 
-	ID2D1Bitmap* MyBitmapManager::LoadBitmap(std::wstring filename)
+	ID2D1Bitmap* MyBitmapManager::LoadBitmapVersionTwo(std::wstring filename)
 	{
 		HRESULT hr;
 		auto result = mBitmapResources.insert({ filename, nullptr });

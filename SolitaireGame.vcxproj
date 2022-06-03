@@ -140,16 +140,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="Card.h" />
     <ClInclude Include="ComException.h" />
     <ClInclude Include="D2DFramework.h" />
     <ClInclude Include="MyBitmapManager.h" />
+    <ClInclude Include="SolitaireGameManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Card.cpp" />
     <ClCompile Include="ComException.cpp" />
     <ClCompile Include="D2DFramework.cpp" />
     <ClCompile Include="MyBitmapManager.cpp" />
     <ClCompile Include="SampleCode.cpp" />
+    <ClCompile Include="SolitaireGameManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

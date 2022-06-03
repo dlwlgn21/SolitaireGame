@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 
-namespace solatiare 
+namespace solitaire
 {
 	class com_exception : public std::exception
 	{

@@ -1,8 +1,9 @@
 #include <Windows.h>
-#include "BuggyHouse.h"
+#include "SolitaireGameManager.h"
 
+using namespace solitaire;
 
-BuggyHouse myFramework;
+SolitaireGameManager myFramework;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLline, _In_ int nShowCmd)
 {

@@ -1,10 +1,10 @@
 #include <sstream>
 #include "D2DFramework.h"
 #include "MyBitmapManager.h"
-
+#include "SolitaireGameManager.h"
 #pragma comment (lib, "d2d1.lib")
 
-using namespace solatiare;
+using namespace solitaire;
 HRESULT D2DFramework::InitWindow(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT height)
 {
 	WNDCLASSEX wc;
@@ -177,12 +177,14 @@ void D2DFramework::ShowErrorMsg(LPCWSTR msg, HRESULT err, LPCWSTR title)
 
 LRESULT CALLBACK D2DFramework::WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
-	/*
-	D2DFramework* pFramework = reinterpret_cast<D2DFramework*>
+	SolitaireGameManager* gm = reinterpret_cast<SolitaireGameManager*>
 		(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-	*/
+
 	switch (msg)
 	{
+	case WM_LBUTTONUP:
+		gm->OnClick(static_cast<float>(LOWORD(lp)), static_cast<float>(HIWORD(lp)));
+		break;
 	case WM_CLOSE:
 		DestroyWindow(hwnd);
 		break;
