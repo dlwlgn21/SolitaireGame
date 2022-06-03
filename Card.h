@@ -33,7 +33,6 @@ namespace solitaire
 		eCardType mECardType;
 		bool mBIsFront;
 		ID2D1Bitmap* mpFrontBitmapImg;
-		ID2D1Bitmap* mpBackBitmapImg;
 	};
 }
 

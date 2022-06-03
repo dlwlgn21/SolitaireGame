@@ -64,8 +64,6 @@ namespace solitaire
 
 					Render();
 					Sleep(STOP_MILI_SEC);
-					std::stringstream ss;
-					OutputDebugStringA(ss.str().c_str());
 					mCardList.remove_if([&](Card& card) {
 						return card.GetIsFront() && pCurCard->GetIsFront() || card.GetIsFront() && pPrevCard->GetIsFront();
 						});

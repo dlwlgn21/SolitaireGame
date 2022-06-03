@@ -4,14 +4,13 @@
 namespace solitaire
 {
     Card::Card(D2DFramework* pFramework, std::wstring filename, float x, float y, eCardType cardType)
-        : Actor(pFramework, filename)
+        : Actor(pFramework, BACK_CARD)
     {
         mX = x;
         mY = y;
         mOpacity = 1.f;
         mBIsFront = false;
         mECardType = cardType;
-        mpBackBitmapImg = MyBitmapManager::GetInstance().LoadBitmapVersionTwo(BACK_CARD);
         switch (mECardType)
         {
         case eCardType::WOLF:
@@ -56,8 +55,8 @@ namespace solitaire
 
     void Card::Draw()
     {
-        float width = static_cast<float>(mpBackBitmapImg->GetPixelSize().width);
-        float height = static_cast<float>(mpBackBitmapImg->GetPixelSize().height);
+        float width = static_cast<float>(mpBitmapImg->GetPixelSize().width);
+        float height = static_cast<float>(mpBitmapImg->GetPixelSize().height);
         D2D1_RECT_F rect{
             mX,
             mY,
