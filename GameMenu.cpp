@@ -92,7 +92,7 @@ namespace solitaire
 
         // Three Image Draw
         
-        // Wolf section
+        // Wolf section.
         auto dir = UP_VECTOR * D2D1::Matrix3x2F::Rotation(mWolfRotation);
         mXLeftWolf += dir.x;
         mYLeftWolf += dir.y;
@@ -103,17 +103,18 @@ namespace solitaire
             D2D_POINT_2F{size.width * 0.5f, size.height * 0.5f}
         );
 
-        D2D_RECT_F rectWolf = {
+        rect = {
             mXLeftWolf,
             mYLeftWolf,
             static_cast<float>(mXLeftWolf + size.width),
             static_cast<float>(mYLeftWolf + size.height)
 
         };
+        // HOW..???? 이곳에서 막힘...
         pRT->SetTransform(matRotation);
         pRT->DrawBitmap(
             mpleftWolfImg,
-            rectWolf,
+            rect,
             mOpacity
         );
         
