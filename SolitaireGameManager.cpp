@@ -8,29 +8,34 @@ namespace solitaire
 	HRESULT SolitaireGameManager::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT height)
 	{
 		D2DFramework::Initialize(hInstance, title, width, height);
-
+		mspGameMenu = std::make_unique<GameMenu>(this);
 		initCardTable();
 
 		return S_OK;
 	}
 	void SolitaireGameManager::Release()
 	{
-		mCardList.clear();
 		mspBackground.reset();
+		for (auto& e : mCardList)
+		{
+			e.reset();
+		}
+		mCardList.clear();
+		mspGameMenu.reset();
 		D2DFramework::Release();
 	}
 	void SolitaireGameManager::Render()
 	{
 		HRESULT hr;
 		mspRenderTarget->BeginDraw();
-
+		
 		mspBackground->Draw();
-
 		for (auto& e : mCardList)
 		{
 			e->Draw();
 		}
 
+		mspGameMenu->Draw();
 		hr = mspRenderTarget->EndDraw();
 
 		if (hr == D2DERR_RECREATE_TARGET)
@@ -151,6 +156,4 @@ namespace solitaire
 		}
 
 	}
-
-
 }

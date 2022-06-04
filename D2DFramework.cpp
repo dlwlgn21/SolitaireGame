@@ -180,10 +180,13 @@ LRESULT CALLBACK D2DFramework::WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp
 	SolitaireGameManager* gm = reinterpret_cast<SolitaireGameManager*>
 		(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
+	std::stringstream ss;
 	switch (msg)
 	{
 	case WM_LBUTTONUP:
 		gm->OnClick(static_cast<float>(LOWORD(lp)), static_cast<float>(HIWORD(lp)));
+		ss << "(x:" << LOWORD(lp) << "), (" << HIWORD(lp) << ")" << std::endl;
+		OutputDebugStringA(ss.str().c_str());
 		break;
 	case WM_CLOSE:
 		DestroyWindow(hwnd);

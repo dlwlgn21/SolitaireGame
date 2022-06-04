@@ -3,6 +3,7 @@
 #include <list>
 #include <string>
 #include "Card.h"
+#include "GameMenu.h"
 #include "D2DFramework.h"
 
 namespace solitaire
@@ -25,8 +26,8 @@ namespace solitaire
 
 	private:
 		void initCardTable();
-
 	private:
+		std::unique_ptr<GameMenu> mspGameMenu;
 		std::unique_ptr<Actor> mspBackground;
 		std::list<std::unique_ptr<Card>> mCardList;
 

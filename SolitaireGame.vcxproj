@@ -143,6 +143,7 @@
     <ClInclude Include="Card.h" />
     <ClInclude Include="ComException.h" />
     <ClInclude Include="D2DFramework.h" />
+    <ClInclude Include="GameMenu.h" />
     <ClInclude Include="MyBitmapManager.h" />
     <ClInclude Include="SolitaireGameManager.h" />
   </ItemGroup>
@@ -151,6 +152,7 @@
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="ComException.cpp" />
     <ClCompile Include="D2DFramework.cpp" />
+    <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="MyBitmapManager.cpp" />
     <ClCompile Include="SampleCode.cpp" />
     <ClCompile Include="SolitaireGameManager.cpp" />
