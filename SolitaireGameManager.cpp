@@ -21,16 +21,16 @@ namespace solitaire
 	}
 	void SolitaireGameManager::Release()
 	{
-		mspBackground.reset();
+		mcpBrush.Reset();
+		mcpDwriteTextFormat.Reset();
+		mcpDwriteFactory.Reset();
 		for (auto& e : mCardList)
 		{
 			e.reset();
 		}
 		mCardList.clear();
+		mspBackground.reset();
 		
-		mcpDwriteFactory.Reset();
-		mcpBrush.Reset();
-		mcpDwriteTextFormat.Reset();
 		D2DFramework::Release();
 	}
 
