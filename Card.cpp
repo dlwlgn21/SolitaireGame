@@ -3,13 +3,14 @@
 #include "MyBitmapManager.h"
 namespace solitaire
 {
-    Card::Card(D2DFramework* pFramework, std::wstring filename, float x, float y, eCardType cardType)
-        : Actor(pFramework, BACK_CARD)
+    Card::Card(D2DFramework* pFramework, std::wstring filename, float x, float y, eCardType cardType, int uniqueIdx)
+        : Actor(pFramework, filename)
     {
         mX = x;
         mY = y;
         mOpacity = 1.f;
         mBIsFront = false;
+        mUniqueIdx = uniqueIdx;
         mECardType = cardType;
         switch (mECardType)
         {
@@ -51,6 +52,11 @@ namespace solitaire
             return true;
         }
         return false;
+    }
+
+    int Card::GetIdx() const
+    {
+        return mUniqueIdx;
     }
 
     void Card::Draw()

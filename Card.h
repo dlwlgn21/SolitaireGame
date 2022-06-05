@@ -21,18 +21,20 @@ namespace solitaire
 	class Card : public Actor
 	{
 	public:
-		Card(D2DFramework* pFramework, std::wstring filename, float x, float y, eCardType cardType);
+		Card(D2DFramework* pFramework, std::wstring filename, float x, float y, eCardType cardType, int uniqueIdx);
 
 		bool IsClicked(float mouseX, float mouseY);
 		eCardType GetCardType() const;
 		bool GetIsFront() const;
+		int GetIdx() const;
 		void Draw() override;
 		void Flip();
 		
 	private:
 		eCardType mECardType;
-		bool mBIsFront;
-		ID2D1Bitmap* mpFrontBitmapImg;
+		bool mBIsFront = false;
+		int mUniqueIdx;
+		ID2D1Bitmap* mpFrontBitmapImg = nullptr;
 	};
 }
 

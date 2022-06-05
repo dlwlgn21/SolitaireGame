@@ -74,6 +74,7 @@ HRESULT D2DFramework::InitD2D(HWND hwnd)
 		return hr;
 	}
 	*/
+	
 	ThrowIfFailed(hr);
 
     return CreateDeviceResources();
@@ -180,13 +181,14 @@ LRESULT CALLBACK D2DFramework::WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp
 	SolitaireGameManager* gm = reinterpret_cast<SolitaireGameManager*>
 		(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
-	std::stringstream ss;
 	switch (msg)
 	{
 	case WM_LBUTTONUP:
-		gm->OnClick(static_cast<float>(LOWORD(lp)), static_cast<float>(HIWORD(lp)));
-		ss << "(x:" << LOWORD(lp) << "), (" << HIWORD(lp) << ")" << std::endl;
-		OutputDebugStringA(ss.str().c_str());
+	{
+		float mouseX = static_cast<float>(LOWORD(lp));
+		float mouseY = static_cast<float>(HIWORD(lp));
+		gm->OnClick(mouseX, mouseY);
+	}
 		break;
 	case WM_CLOSE:
 		DestroyWindow(hwnd);
