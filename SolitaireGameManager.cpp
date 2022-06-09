@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <cassert>
 #include <random>
+#include <algorithm>
 #include "SolitaireGameManager.h"
 
 #pragma comment (lib, "Dwrite.lib")
@@ -11,8 +12,9 @@ namespace solitaire
 	{
 		D2DFramework::Initialize(hInstance, title, width, height);
 		mspBackground = std::make_unique<Actor>(this, BACKGROUND_FILENAME2);
+		mspGameMenu = std::make_unique<GameMenu>(this);
 		mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);;
-
+			
 		initCardType();
 		initCard();
 		createDeviceIndependentResources();
@@ -30,7 +32,7 @@ namespace solitaire
 		}
 		mCardList.clear();
 		mspBackground.reset();
-		
+		mspGameMenu.reset();
 		D2DFramework::Release();
 	}
 
@@ -61,7 +63,7 @@ namespace solitaire
 		mspRenderTarget->BeginDraw();
 
 		mspBackground->Draw();
-
+		
 		for (auto& e : mCardList)
 		{
 			e->Draw();
@@ -99,7 +101,7 @@ namespace solitaire
 			mcpBrush.Get()
 		);
 
-
+		mspGameMenu->Draw();
 		hr = mspRenderTarget->EndDraw();
 
 		if (hr == D2DERR_RECREATE_TARGET)
@@ -133,15 +135,11 @@ namespace solitaire
 				{
 					--mLeftTrialCount;
 					Sleep(STOP_MILI_SEC);
-					mCardList.remove_if([&](auto& card) {
+					auto iter = std::remove_if(mCardList.begin(), mCardList.end(), [&](auto& card) {
 						return card->GetIdx() == pCurCard->GetIdx() || card->GetIdx() == pPrevCard->GetIdx();
 						}
 					);
-					//mCardList.erase(std::remove_if(mCardList.begin(), mCardList.end(),
-					//	[&](auto& card)
-					//	{
-					//		return card.GetIdx() == pPrevCard->GetIdx();
-					//	}));
+					mCardList.erase(iter, mCardList.end());
 					pPrevCard = nullptr;
 					if (mCardList.size() == 0)
 					{

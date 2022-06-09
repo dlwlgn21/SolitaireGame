@@ -16,7 +16,7 @@ namespace solitaire
 		D2D_VECTOR_2F GetPosition() const;
 		void SetPosition(float x, float y);
 		void SetPosition(D2D_VECTOR_2F vector);
-
+		D2D1_SIZE_U GetBitmapPixelSize();
 	private:
 
 		void draw(float x, float y, float opacity = 1.f);

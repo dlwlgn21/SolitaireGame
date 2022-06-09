@@ -42,6 +42,11 @@ namespace solitaire
 		mY = vector.y;
 	}
 
+	D2D1_SIZE_U Actor::GetBitmapPixelSize()
+	{
+		return D2D1_SIZE_U{mpBitmapImg->GetPixelSize().width, mpBitmapImg->GetPixelSize().height};
+	}
+
 	void Actor::draw(float x, float y, float opacity)
 	{
 		D2D1_SIZE_U size = mpBitmapImg->GetPixelSize();
