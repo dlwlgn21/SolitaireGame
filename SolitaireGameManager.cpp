@@ -12,12 +12,9 @@ namespace solitaire
 	{
 		D2DFramework::Initialize(hInstance, title, width, height);
 		mspBackground = std::make_unique<Actor>(this, BACKGROUND_FILENAME2);
+		createDeviceIndependentResources();
 		mspGameMenu = std::make_unique<GameMenu>(this);
 		mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);;
-			
-		initCardType();
-		initCard();
-		createDeviceIndependentResources();
 
 		return S_OK;
 	}
@@ -61,47 +58,52 @@ namespace solitaire
 
 		HRESULT hr;
 		mspRenderTarget->BeginDraw();
-
-		mspBackground->Draw();
-		
-		for (auto& e : mCardList)
+		if (mBIsEnteredGame == false)
 		{
-			e->Draw();
+			mspGameMenu->Draw();
 		}
+		else
+		{
+			mspBackground->Draw();
 
-		mspRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+			for (auto& e : mCardList)
+			{
+				e->Draw();
+			}
 
-		mspRenderTarget->DrawTextW(
-			LEFT_GAME_LEVEL_TEXT,
-			static_cast<UINT32>(wcslen(LEFT_GAME_LEVEL_TEXT)),
-			mcpDwriteTextFormat.Get(),
-			D2D1::RectF(LEVEL_TEXT_BOX_X_POS, LEVEL_TEXT_BOX_Y_POS, LEVEL_TEXT_BOX_WIDTH, LEVEL_TEXT_BOX_HEIGHT),
-			mcpBrush.Get()
-		);
-		mspRenderTarget->DrawTextW(
-			_itow(getLeftGameLevel(), gameLevelBuffer, 10),
-			static_cast<UINT32>(wcslen(gameLevelBuffer)),
-			mcpDwriteTextFormat.Get(),
-			D2D1::RectF(LEVEL_COUNT_BOX_X_POS, LEVEL_COUNT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS),
-			mcpBrush.Get()
-		);
+			mspRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
-		mspRenderTarget->DrawTextW(
-			LEFT_FLIP_COUNT_TEXT,
-			static_cast<UINT32>(wcslen(LEFT_FLIP_COUNT_TEXT)),
-			mcpDwriteTextFormat.Get(),
-			D2D1::RectF(FLIP_TEXT_BOX_X_POS, FLIP_TEXT_BOX_Y_POS, FLIP_TEXT_BOX_WIDTH, FLIP_TEXT_BOX_HEIGHT),
-			mcpBrush.Get()
-		);
-		mspRenderTarget->DrawTextW(
-			_itow(mLeftTrialCount, countBuffer, 10),
-			static_cast<UINT32>(wcslen(countBuffer)),
-			mcpDwriteTextFormat.Get(),
-			D2D1::RectF(COUNT_TEXT_BOX_X_POS, COUNT_TEXT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS),
-			mcpBrush.Get()
-		);
+			mspRenderTarget->DrawTextW(
+				LEFT_GAME_LEVEL_TEXT,
+				static_cast<UINT32>(wcslen(LEFT_GAME_LEVEL_TEXT)),
+				mcpDwriteTextFormat.Get(),
+				D2D1::RectF(LEVEL_TEXT_BOX_X_POS, LEVEL_TEXT_BOX_Y_POS, LEVEL_TEXT_BOX_WIDTH, LEVEL_TEXT_BOX_HEIGHT),
+				mcpBrush.Get()
+			);
+			mspRenderTarget->DrawTextW(
+				_itow(getLeftGameLevel(), gameLevelBuffer, 10),
+				static_cast<UINT32>(wcslen(gameLevelBuffer)),
+				mcpDwriteTextFormat.Get(),
+				D2D1::RectF(LEVEL_COUNT_BOX_X_POS, LEVEL_COUNT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS),
+				mcpBrush.Get()
+			);
 
-		mspGameMenu->Draw();
+			mspRenderTarget->DrawTextW(
+				LEFT_FLIP_COUNT_TEXT,
+				static_cast<UINT32>(wcslen(LEFT_FLIP_COUNT_TEXT)),
+				mcpDwriteTextFormat.Get(),
+				D2D1::RectF(FLIP_TEXT_BOX_X_POS, FLIP_TEXT_BOX_Y_POS, FLIP_TEXT_BOX_WIDTH, FLIP_TEXT_BOX_HEIGHT),
+				mcpBrush.Get()
+			);
+			mspRenderTarget->DrawTextW(
+				_itow(mLeftTrialCount, countBuffer, 10),
+				static_cast<UINT32>(wcslen(countBuffer)),
+				mcpDwriteTextFormat.Get(),
+				D2D1::RectF(COUNT_TEXT_BOX_X_POS, COUNT_TEXT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS),
+				mcpBrush.Get()
+			);
+		}
+		
 		hr = mspRenderTarget->EndDraw();
 
 		if (hr == D2DERR_RECREATE_TARGET)
@@ -112,6 +114,23 @@ namespace solitaire
 	}
 	void SolitaireGameManager::OnClick(float mouseX, float mouseY)
 	{
+		if (mBIsEnteredGame == false)
+		{
+			if (mspGameMenu->IsStartButtonClicked(mouseX, mouseY))
+			{
+				mspGameMenu.reset();
+				mBIsEnteredGame = true;
+				initCardType();
+				initCard();
+				return;
+			}
+			if (mspGameMenu->IsEndButtonClicked(mouseX, mouseY))
+			{
+				DestroyWindow(mHwnd);
+				return;
+			}
+		}
+
 		Card* pCurCard = nullptr;
 		for (auto& e : mCardList)
 		{
@@ -182,6 +201,16 @@ namespace solitaire
 			}
 
 		}
+	}
+
+	IDWriteTextFormat* SolitaireGameManager::GetDWriteTextFormat() const
+	{
+		return mcpDwriteTextFormat.Get();
+	}
+
+	ID2D1SolidColorBrush* SolitaireGameManager::GetD2DSolidColorBrush() const
+	{
+		return mcpBrush.Get();
 	}
 
 

@@ -1,3 +1,4 @@
+#include <cassert>
 #include "Actor.h"
 #include "MyBitmapManager.h"
 namespace solitaire
@@ -40,6 +41,12 @@ namespace solitaire
 	{
 		mX = vector.x;
 		mY = vector.y;
+	}
+
+	void Actor::SetOpacity(float opacity)
+	{
+		assert(opacity >= 0.f && opacity <= 1.f);
+		mOpacity = opacity;
 	}
 
 	D2D1_SIZE_U Actor::GetBitmapPixelSize()

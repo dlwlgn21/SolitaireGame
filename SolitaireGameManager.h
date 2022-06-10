@@ -57,6 +57,9 @@ namespace solitaire
 
 		void OnClick(float mouseX, float mouseY);
 	
+		IDWriteTextFormat* GetDWriteTextFormat() const;
+		ID2D1SolidColorBrush* GetD2DSolidColorBrush() const;
+
 	private:
 		void initCard();
 		void initCardType();
@@ -64,7 +67,7 @@ namespace solitaire
 		inline int getLeftGameLevel() const;
 		HRESULT createDeviceIndependentResources();
 
-
+	
 	private:
 		std::unique_ptr<Actor> mspBackground;
 		std::unique_ptr<GameMenu> mspGameMenu;
@@ -77,6 +80,7 @@ namespace solitaire
 
 		int mCurGameLevel{};
 		int mLeftTrialCount{};
+		bool mBIsEnteredGame = false;
 	};
 }
 

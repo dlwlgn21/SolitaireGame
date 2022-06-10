@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <cstring>
 #include <sstream>
 #include "D2DFramework.h"
 #include "MyBitmapManager.h"
@@ -180,14 +182,16 @@ LRESULT CALLBACK D2DFramework::WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp
 {
 	SolitaireGameManager* gm = reinterpret_cast<SolitaireGameManager*>
 		(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-
 	switch (msg)
 	{
 	case WM_LBUTTONUP:
 	{
+		char buffer[64];
 		float mouseX = static_cast<float>(LOWORD(lp));
 		float mouseY = static_cast<float>(HIWORD(lp));
 		gm->OnClick(mouseX, mouseY);
+		sprintf(buffer, "(X : %.3f, Y : %.3f)\n", mouseX, mouseY);
+		OutputDebugStringA(buffer);
 	}
 		break;
 	case WM_CLOSE:

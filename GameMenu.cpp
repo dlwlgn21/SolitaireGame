@@ -1,11 +1,12 @@
 #include "GameMenu.h"
-
+#include "SolitaireGameManager.h"
 namespace solitaire
 {
 	GameMenu::GameMenu(D2DFramework* pFramework, std::wstring filename)
 		: Actor(pFramework, filename)
 	{
 		mspStartButtonActor = std::make_unique<Actor>(pFramework, L"Data/StartButton3.png");
+		mspFakeStartButtonActor = std::make_unique<Actor>(pFramework, L"Data/EndButton3.png");
 		mspEndButtonActor = std::make_unique<Actor>(pFramework, L"Data/EndButton3.png");
 		mspLeftAcotr = std::make_unique<Actor>(pFramework, L"Data/card_creature_wolf.png");
 		mspCenterActor = std::make_unique<Actor>(pFramework, L"Data/card_creature_dragon.png");
@@ -13,6 +14,8 @@ namespace solitaire
 
 
 		mspStartButtonActor->SetPosition(START_X_POS, START_Y_POS);
+		mspFakeStartButtonActor->SetPosition(END_X_POS, END_Y_POS - 165.f);
+		mspFakeStartButtonActor->SetOpacity(0.f);
 		mspEndButtonActor->SetPosition(END_X_POS, END_Y_POS);
 		//mspLeftAcotr->SetPosition(LEFT_X_POS, THREE_Y_POS);
 		//mspCenterActor->SetPosition(CENTER_X_POS, THREE_Y_POS);
@@ -22,8 +25,12 @@ namespace solitaire
 
 	GameMenu::~GameMenu()
 	{
-		mspStartButtonActor.reset();
+		mspRightActor.reset();
+		mspCenterActor.reset();
+		mspLeftAcotr.reset();
 		mspEndButtonActor.reset();
+		mspFakeStartButtonActor.reset();
+		mspStartButtonActor.reset();
 	}
 
 	void GameMenu::Draw()
@@ -31,6 +38,7 @@ namespace solitaire
 		Actor::Draw();
 		D2D1_SIZE_U size = mspLeftAcotr->GetBitmapPixelSize();
 		ID2D1HwndRenderTarget* pRT = mpFramework->GetRenderTarget();
+		SolitaireGameManager* pGM = static_cast<SolitaireGameManager*>(mpFramework);
 		D2D1::Matrix3x2F matScale = D2D1::Matrix3x2F::Scale(0.5f, 0.5f);
 		pRT->SetTransform(matScale);
 		mspStartButtonActor->Draw();
@@ -64,9 +72,48 @@ namespace solitaire
 		pRT->SetTransform(matRotation * matTranslation);
 		mspRightActor->Draw();
 		pRT->SetTransform(D2D1::Matrix3x2F::Identity());
-
 		mspEndButtonActor->Draw();
+		mspFakeStartButtonActor->Draw();
+		D2D1_RECT_F textRect{
+			TEXT_RECT_X_POS,
+			TEXT_RECT_Y_POS,
+			TEXT_RECT_X_POS + TEXT_RECT_WIDTH,
+			TEXT_RECT_Y_POS + TEXT_RECT_HEIGHT
+		};
+		pRT->DrawTextW(
+			GAME_TITLE,
+			static_cast<UINT32>(wcslen(GAME_TITLE)),
+			pGM->GetDWriteTextFormat(),
+			textRect,
+			pGM->GetD2DSolidColorBrush()
+		);
+		
+	}
 
+	bool GameMenu::IsStartButtonClicked(float mouseX, float mouseY)
+	{
+		D2D_VECTOR_2F pos = mspFakeStartButtonActor->GetPosition();
+		D2D_SIZE_U size = mspFakeStartButtonActor->GetBitmapPixelSize();
+		if (mouseX >= pos.x && mouseX <= pos.x + size.width &&
+			mouseY >= pos.y && mouseY <= pos.y + size.height)
+		{
+			OutputDebugStringA("Entered Start Menu\n");
+			return true;
+		}
+		return false;
+	}
+
+	bool GameMenu::IsEndButtonClicked(float mouseX, float mouseY)
+	{
+		D2D_VECTOR_2F pos = mspEndButtonActor->GetPosition();
+		D2D_SIZE_U size = mspEndButtonActor->GetBitmapPixelSize();
+		if (mouseX >= pos.x && mouseX <= pos.x + size.width &&
+			mouseY >= pos.y && mouseY <= pos.y + size.height)
+		{
+			OutputDebugStringA("Entered End Menu\n");
+			return true;
+		}
+		return false;
 	}
 
 }
