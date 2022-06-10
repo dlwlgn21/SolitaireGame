@@ -146,6 +146,7 @@
     <ClInclude Include="GameMenu.h" />
     <ClInclude Include="MyBitmapManager.h" />
     <ClInclude Include="SolitaireGameManager.h" />
+    <ClInclude Include="YesNoGameMessageBox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="MyBitmapManager.cpp" />
     <ClCompile Include="SampleCode.cpp" />
     <ClCompile Include="SolitaireGameManager.cpp" />
+    <ClCompile Include="YesNoGameMessageBox.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,7 +8,9 @@ namespace solitaire
 	{
 	public:
 		Actor(D2DFramework* pFramework, std::wstring filename);
+		Actor(D2DFramework* pFramework, std::wstring filename, float scaleX);
 		Actor(D2DFramework* pFramework, std::wstring filename, float x, float y, float opacity = 1.f);
+		
 		virtual ~Actor();
 
 		virtual void Draw();

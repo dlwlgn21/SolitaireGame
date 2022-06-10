@@ -19,6 +19,7 @@ namespace solitaire
 		void Release();
 
 		ID2D1Bitmap* LoadBitmapVersionTwo(std::wstring filename);
+		ID2D1Bitmap* LoadBitmapScaleVerson(std::wstring filename, float xScale, float yScale);
 	
 	private:
 		MyBitmapManager() = default;
@@ -26,7 +27,7 @@ namespace solitaire
 		MyBitmapManager& operator=(const MyBitmapManager& other) {}
 
 		HRESULT LoadWICBitmapImg(std::wstring filename, ID2D1Bitmap** ppBitmap);
-
+		HRESULT LoadBitmapWithScale(std::wstring filename, ID2D1Bitmap** ppBitmap, float xScale, float yScale);
 	private:
 		ID2D1HwndRenderTarget* mpRenderTarget{};
 		Microsoft::WRL::ComPtr<IWICImagingFactory> mcpWICFactory{};

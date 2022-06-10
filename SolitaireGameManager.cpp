@@ -14,6 +14,7 @@ namespace solitaire
 		mspBackground = std::make_unique<Actor>(this, BACKGROUND_FILENAME2);
 		createDeviceIndependentResources();
 		mspGameMenu = std::make_unique<GameMenu>(this);
+		mspMSGBox = std::make_unique<YesNoGameMessageBox>(this, L"Data/MesageBox.png");
 		mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);;
 
 		return S_OK;
@@ -30,6 +31,7 @@ namespace solitaire
 		mCardList.clear();
 		mspBackground.reset();
 		mspGameMenu.reset();
+		mspMSGBox.reset();
 		D2DFramework::Release();
 	}
 
@@ -65,7 +67,7 @@ namespace solitaire
 		else
 		{
 			mspBackground->Draw();
-
+			mspMSGBox->Draw();
 			for (auto& e : mCardList)
 			{
 				e->Draw();

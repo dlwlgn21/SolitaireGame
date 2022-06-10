@@ -11,6 +11,15 @@ namespace solitaire
 	{
 		mpBitmapImg = MyBitmapManager::GetInstance().LoadBitmapVersionTwo(filename);
 	}
+	Actor::Actor(D2DFramework* pFramework, std::wstring filename, float scaleX)
+		: mpFramework(pFramework)
+		, mX{}
+		, mY{}
+		, mOpacity{1.f}
+	{
+		mpBitmapImg = MyBitmapManager::GetInstance().LoadBitmapScaleVerson(filename, scaleX, scaleX);
+	}
+
 	Actor::Actor(D2DFramework* pFramework, std::wstring filename, float x, float y, float opacity)
 		: Actor(pFramework, filename)
 	{

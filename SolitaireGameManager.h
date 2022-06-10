@@ -6,6 +6,7 @@
 #include <dwrite.h>
 #include "Card.h"
 #include "GameMenu.h"
+#include "YesNoGameMessageBox.h"
 #include "D2DFramework.h"
 
 namespace solitaire
@@ -71,6 +72,7 @@ namespace solitaire
 	private:
 		std::unique_ptr<Actor> mspBackground;
 		std::unique_ptr<GameMenu> mspGameMenu;
+		std::unique_ptr<YesNoGameMessageBox> mspMSGBox;
 		std::list<std::unique_ptr<Card>> mCardList;
 		std::vector<eCardType> mCardTypes;
 		Microsoft::WRL::ComPtr<IDWriteFactory> mcpDwriteFactory;
