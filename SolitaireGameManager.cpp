@@ -68,10 +68,10 @@ namespace solitaire
 		{
 			mspBackground->Draw();
 			mspMSGBox->Draw();
-			for (auto& e : mCardList)
+			/*for (auto& e : mCardList)
 			{
 				e->Draw();
-			}
+			}*/
 
 			mspRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 

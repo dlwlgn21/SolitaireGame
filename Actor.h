@@ -14,7 +14,7 @@ namespace solitaire
 		virtual ~Actor();
 
 		virtual void Draw();
-
+		virtual void SizedDraw(D2D1_RECT_F& rect);
 		
 		D2D_VECTOR_2F GetPosition() const;
 		void SetPosition(float x, float y);

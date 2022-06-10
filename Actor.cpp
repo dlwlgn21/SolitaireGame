@@ -35,6 +35,15 @@ namespace solitaire
 	{
 		draw(mX, mY, mOpacity);
 	}
+	void Actor::SizedDraw(D2D1_RECT_F& rect)
+	{
+
+		mpFramework->GetRenderTarget()->DrawBitmap(
+			mpBitmapImg,
+			rect,
+			1.f
+		);
+	}
 	D2D_VECTOR_2F Actor::GetPosition() const
 	{
 		return D2D_VECTOR_2F{mX, mY};
