@@ -16,30 +16,28 @@ namespace solitaire
 
 	void YesNoGameMessageBox::Draw()
 	{
-		RECT clientRect{};
-
-		GetClientRect(mpFramework->GetWindowHandle(), &clientRect);
+		auto pRT = mpFramework->GetRenderTarget();
 
 		D2D1_RECT_F rect{
-			0.f,
-			0.f,
-			static_cast<float>(clientRect.right - clientRect.left),
-			static_cast<float>(clientRect.bottom - clientRect.top)
+			BACK_X_POS,
+			BACK_Y_POS,
+			BACK_X_POS + BACK_WIDTH,
+			BACK_Y_POS + BACK_HEIGHT
 		};
 
 		SizedDraw(rect);
 		D2D1_RECT_F yesRect{
-			YES_X_POS,
+			YES_NO_X_POS,
 			YES_Y_POS,
-			YES_NO_WIDTH,
-			YES_NO_HEIGHT
+			YES_NO_X_POS + YES_NO_WIDTH,
+			YES_Y_POS + YES_NO_HEIGHT
 		};
 
 		D2D1_RECT_F noRect{
-			NO_X_POS,
+			YES_NO_X_POS,
 			NO_Y_POS,
-			YES_NO_WIDTH,
-			YES_NO_HEIGHT
+			YES_NO_X_POS + YES_NO_WIDTH,
+			NO_Y_POS + YES_NO_HEIGHT
 		};
 		mspYesButtonImg->SizedDraw(yesRect);
 		mspNoButtonImg->SizedDraw(noRect);
