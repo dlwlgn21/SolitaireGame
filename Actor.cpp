@@ -41,7 +41,7 @@ namespace solitaire
 		mpFramework->GetRenderTarget()->DrawBitmap(
 			mpBitmapImg,
 			rect,
-			1.f
+			mOpacity
 		);
 	}
 	D2D_VECTOR_2F Actor::GetPosition() const

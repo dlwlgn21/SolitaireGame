@@ -14,7 +14,7 @@ namespace solitaire
 		mspBackground = std::make_unique<Actor>(this, BACKGROUND_FILENAME2);
 		createDeviceIndependentResources();
 		mspGameMenu = std::make_unique<GameMenu>(this);
-		mspMSGBox = std::make_unique<YesNoGameMessageBox>(this, L"Data/MesageBox.png");
+		mspMSGBox = std::make_unique<YesNoGameMessageBox>(this, L"Data/BlueBorder.png", L"Continue?");
 		mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);;
 
 		return S_OK;
@@ -31,7 +31,6 @@ namespace solitaire
 		mCardList.clear();
 		mspBackground.reset();
 		mspGameMenu.reset();
-		mspMSGBox.reset();
 		D2DFramework::Release();
 	}
 
@@ -67,11 +66,11 @@ namespace solitaire
 		else
 		{
 			mspBackground->Draw();
-			mspMSGBox->Draw();
-			/*for (auto& e : mCardList)
+			
+			for (auto& e : mCardList)
 			{
 				e->Draw();
-			}*/
+			}
 
 			mspRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
@@ -131,6 +130,16 @@ namespace solitaire
 				DestroyWindow(mHwnd);
 				return;
 			}
+		}
+
+		// Message Box Section
+		if (mspMSGBox->IsYesClicked(mouseX, mouseY))
+		{
+		
+		}
+		if (mspMSGBox->IsNoClicked(mouseX, mouseY))
+		{
+			DestroyWindow(mHwnd);
 		}
 
 		Card* pCurCard = nullptr;
