@@ -20,7 +20,6 @@ namespace solitaire
 		//mspLeftAcotr->SetPosition(LEFT_X_POS, THREE_Y_POS);
 		//mspCenterActor->SetPosition(CENTER_X_POS, THREE_Y_POS);
 		//mspRightActor->SetPosition(RIGHT_X_POS, THREE_Y_POS);
-
 	}
 
 	GameMenu::~GameMenu()

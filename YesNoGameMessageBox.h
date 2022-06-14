@@ -6,19 +6,19 @@ namespace solitaire
     class YesNoGameMessageBox : public Actor
     {
         const float BACK_X_POS = 250.f;
-        const float BACK_Y_POS = 250.f;
+        const float BACK_Y_POS = 150.f;
         const float BACK_WIDTH = 500.f;
         const float BACK_HEIGHT = 300.f;
 
 
         const float YES_X_POS = 330.f;
         const float NO_X_POS = 530.f;
-        const float YES_NO_Y_POS = 400.f;
+        const float YES_NO_Y_POS = 300.f;
         const float YES_NO_WIDTH = 150.f;
         const float YES_NO_HEIGHT = 100.f;
 
         const float DRAW_RECT_X_POS = 350.f;
-        const float DRAW_RECT_Y_POS = 280.f;
+        const float DRAW_RECT_Y_POS = 180.f;
         const float DRAW_RECT_WIDTH = 300.f;
         const float DRAW_RECT_HEIGHT = 150.f;
 

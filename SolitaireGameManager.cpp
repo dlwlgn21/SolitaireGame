@@ -14,7 +14,7 @@ namespace solitaire
 		mspBackground = std::make_unique<Actor>(this, BACKGROUND_FILENAME2);
 		createDeviceIndependentResources();
 		mspGameMenu = std::make_unique<GameMenu>(this);
-		mspMSGBox = std::make_unique<YesNoGameMessageBox>(this, L"Data/BlueBorder.png", L"go to Next level?");
+		mspMSGBox = std::make_unique<YesNoGameMessageBox>(this, L"Data/BlueBorder.png", NEXT_TEXT);
 		mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);;
 
 		return S_OK;
@@ -29,8 +29,9 @@ namespace solitaire
 			e.reset();
 		}
 		mCardList.clear();
-		mspBackground.reset();
+		mspMSGBox.reset();
 		mspGameMenu.reset();
+		mspBackground.reset();
 		D2DFramework::Release();
 	}
 
@@ -39,7 +40,8 @@ namespace solitaire
 		if (mLeftTrialCount <= 0)
 		{
 			mBIsEnteredContinue = true;
-			mspMSGBox->SetText(L"wanna play Again?");
+			mspMSGBox->SetText(AGAIN_TEXT);
+			clearCardList();
 		}
 
 		HRESULT hr;
@@ -55,45 +57,46 @@ namespace solitaire
 			{
 				mspMSGBox->Draw();
 			}
-
-			for (auto& e : mCardList)
+			else
 			{
-				e->Draw();
+				for (auto& e : mCardList)
+				{
+					e->Draw();
+				}
+
+				mspRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+				mspRenderTarget->DrawTextW(
+					LEFT_GAME_LEVEL_TEXT,
+					static_cast<UINT32>(wcslen(LEFT_GAME_LEVEL_TEXT)),
+					mcpDwriteTextFormat.Get(),
+					D2D1::RectF(LEVEL_TEXT_BOX_X_POS, LEVEL_TEXT_BOX_Y_POS, LEVEL_TEXT_BOX_WIDTH, LEVEL_TEXT_BOX_HEIGHT),
+					mcpBrush.Get()
+				);
+				mspRenderTarget->DrawTextW(
+					_itow(getLeftGameLevel(), gameLevelBuffer, 10),
+					static_cast<UINT32>(wcslen(gameLevelBuffer)),
+					mcpDwriteTextFormat.Get(),
+					D2D1::RectF(LEVEL_COUNT_BOX_X_POS, LEVEL_COUNT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS),
+					mcpBrush.Get()
+				);
+
+				mspRenderTarget->DrawTextW(
+					LEFT_FLIP_COUNT_TEXT,
+					static_cast<UINT32>(wcslen(LEFT_FLIP_COUNT_TEXT)),
+					mcpDwriteTextFormat.Get(),
+					D2D1::RectF(FLIP_TEXT_BOX_X_POS, FLIP_TEXT_BOX_Y_POS, FLIP_TEXT_BOX_WIDTH, FLIP_TEXT_BOX_HEIGHT),
+					mcpBrush.Get()
+				);
+				mspRenderTarget->DrawTextW(
+					_itow(mLeftTrialCount, countBuffer, 10),
+					static_cast<UINT32>(wcslen(countBuffer)),
+					mcpDwriteTextFormat.Get(),
+					D2D1::RectF(COUNT_TEXT_BOX_X_POS, COUNT_TEXT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS),
+					mcpBrush.Get()
+				);
 			}
-
-			mspRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
-
-			mspRenderTarget->DrawTextW(
-				LEFT_GAME_LEVEL_TEXT,
-				static_cast<UINT32>(wcslen(LEFT_GAME_LEVEL_TEXT)),
-				mcpDwriteTextFormat.Get(),
-				D2D1::RectF(LEVEL_TEXT_BOX_X_POS, LEVEL_TEXT_BOX_Y_POS, LEVEL_TEXT_BOX_WIDTH, LEVEL_TEXT_BOX_HEIGHT),
-				mcpBrush.Get()
-			);
-			mspRenderTarget->DrawTextW(
-				_itow(getLeftGameLevel(), gameLevelBuffer, 10),
-				static_cast<UINT32>(wcslen(gameLevelBuffer)),
-				mcpDwriteTextFormat.Get(),
-				D2D1::RectF(LEVEL_COUNT_BOX_X_POS, LEVEL_COUNT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS),
-				mcpBrush.Get()
-			);
-
-			mspRenderTarget->DrawTextW(
-				LEFT_FLIP_COUNT_TEXT,
-				static_cast<UINT32>(wcslen(LEFT_FLIP_COUNT_TEXT)),
-				mcpDwriteTextFormat.Get(),
-				D2D1::RectF(FLIP_TEXT_BOX_X_POS, FLIP_TEXT_BOX_Y_POS, FLIP_TEXT_BOX_WIDTH, FLIP_TEXT_BOX_HEIGHT),
-				mcpBrush.Get()
-			);
-			mspRenderTarget->DrawTextW(
-				_itow(mLeftTrialCount, countBuffer, 10),
-				static_cast<UINT32>(wcslen(countBuffer)),
-				mcpDwriteTextFormat.Get(),
-				D2D1::RectF(COUNT_TEXT_BOX_X_POS, COUNT_TEXT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS, COUNT_TEXT_BOX_Y_POS),
-				mcpBrush.Get()
-			);
 		}
-		
 		hr = mspRenderTarget->EndDraw();
 
 		if (hr == D2DERR_RECREATE_TARGET)
@@ -120,32 +123,40 @@ namespace solitaire
 				return;
 			}
 		}
+
 		if (mBIsEnteredContinue)
 		{
 			clearCardList();
 			Render();
 			if (mspMSGBox->IsYesClicked(mouseX, mouseY))
 			{
-				if (mspMSGBox->GetText() == L"wanna play Again?")
+				if (mspMSGBox->GetText() == AGAIN_TEXT)
 				{
 
-					mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);
+					initCard();
+					mspMSGBox->SetText(NEXT_TEXT);
+				}
+				else if (mspMSGBox->GetText() == NEXT_TEXT)
+				{
+					++mCurGameLevel;
 					releaseAndInitCard();
-					mBIsEnteredContinue = false;
 				}
 				else
 				{
-					++mCurGameLevel;
-					mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);
-					releaseAndInitCard();
-					mBIsEnteredContinue = false;
+					mCurGameLevel = 0;
+					mspMSGBox->SetText(NEXT_TEXT);
+					mCardList.clear();
+					initCard();
 				}
+				mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);
+				mBIsEnteredContinue = false;
 			}
 			else if (mspMSGBox->IsNoClicked(mouseX, mouseY))
 			{
 				DestroyWindow(mHwnd);
 			}
 		}
+
 
 		Card* pCurCard = nullptr;
 		for (auto& e : mCardList)
@@ -180,8 +191,7 @@ namespace solitaire
 					{
 						if (mCurGameLevel >= MAX_GAME_LEVEL)
 						{
-							MessageBoxA(mHwnd, "ALL LEVEL CLEAER!!!", "CLEAR", MB_OK);
-							DestroyWindow(mHwnd);
+							mspMSGBox->SetText(CLEAR_TEXT);
 						}
 						mBIsEnteredContinue = true;
 					}
@@ -216,7 +226,6 @@ namespace solitaire
 	{
 		return mcpBrush.Get();
 	}
-
 
 
 	void SolitaireGameManager::initCard()
@@ -275,7 +284,7 @@ namespace solitaire
 		mcpDwriteTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
 		ThrowIfFailed(hr);
 
-		mspRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::MediumSpringGreen), mcpBrush.GetAddressOf());
+		mspRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::OrangeRed), mcpBrush.GetAddressOf());
 		
 		return S_OK;
 	}

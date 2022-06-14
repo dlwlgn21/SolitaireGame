@@ -15,9 +15,12 @@ namespace solitaire
 	const int STOP_MILI_SEC = 500;
 	class SolitaireGameManager : public D2DFramework
 	{
-		const wchar_t BACKGROUND_FILENAME2[MAX_STR_LEN] = L"Data/GreenDragon.jpg";
+		const std::wstring AGAIN_TEXT = L"Wanna play Again?";
+		const std::wstring NEXT_TEXT = L"Go to Next level?";
+		const std::wstring CLEAR_TEXT = L"Clear!\nPlay more?";
 		const wchar_t LEFT_FLIP_COUNT_TEXT[MAX_STR_LEN] = L"Left flip count : ";
 		const wchar_t LEFT_GAME_LEVEL_TEXT[MAX_STR_LEN] = L"LEFT GAME LEVEL : ";
+		const wchar_t BACKGROUND_FILENAME2[MAX_STR_LEN] = L"Data/GreenDragon.jpg";
 		wchar_t gameLevelBuffer[MAX_STR_LEN];
 		wchar_t countBuffer[MAX_STR_LEN];
 		const int MAX_CARD_COUNT = 10;
