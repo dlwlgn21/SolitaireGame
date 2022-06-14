@@ -22,90 +22,82 @@ namespace solitaire
 
 	void YesNoGameMessageBox::Draw()
 	{
-		if (!mBIsYesClicked)
-		{
-			auto pRT = mpFramework->GetRenderTarget();
-			SolitaireGameManager* pManager = static_cast<SolitaireGameManager*>(mpFramework);
-			pManager->GetRenderTarget()->DrawTextW(
-				mText.c_str(),
-				static_cast<UINT32>(wcslen(mText.c_str())),
-				pManager->GetDWriteTextFormat(),
-				D2D1::RectF(
-					DRAW_RECT_X_POS,
-					DRAW_RECT_Y_POS,
-					DRAW_RECT_X_POS + DRAW_RECT_WIDTH,
-					DRAW_RECT_Y_POS + DRAW_RECT_HEIGHT
-				),
-				pManager->GetD2DSolidColorBrush()
-			);
+		auto pRT = mpFramework->GetRenderTarget();
+		SolitaireGameManager* pManager = static_cast<SolitaireGameManager*>(mpFramework);
+		pManager->GetRenderTarget()->DrawTextW(
+			mText.c_str(),
+			static_cast<UINT32>(wcslen(mText.c_str())),
+			pManager->GetDWriteTextFormat(),
+			D2D1::RectF(
+				DRAW_RECT_X_POS,
+				DRAW_RECT_Y_POS,
+				DRAW_RECT_X_POS + DRAW_RECT_WIDTH,
+				DRAW_RECT_Y_POS + DRAW_RECT_HEIGHT
+			),
+			pManager->GetD2DSolidColorBrush()
+		);
 
-			D2D1_RECT_F rect{
-				BACK_X_POS,
-				BACK_Y_POS,
-				BACK_X_POS + BACK_WIDTH,
-				BACK_Y_POS + BACK_HEIGHT
-			};
+		D2D1_RECT_F rect{
+			BACK_X_POS,
+			BACK_Y_POS,
+			BACK_X_POS + BACK_WIDTH,
+			BACK_Y_POS + BACK_HEIGHT
+		};
 
-			SizedDraw(rect);
-			D2D1_RECT_F yesRect{
-				YES_X_POS,
-				YES_NO_Y_POS,
-				YES_X_POS + YES_NO_WIDTH,
-				YES_NO_Y_POS + YES_NO_HEIGHT
-			};
+		SizedDraw(rect);
+		D2D1_RECT_F yesRect{
+			YES_X_POS,
+			YES_NO_Y_POS,
+			YES_X_POS + YES_NO_WIDTH,
+			YES_NO_Y_POS + YES_NO_HEIGHT
+		};
 
-			D2D1_RECT_F noRect{
-				NO_X_POS,
-				YES_NO_Y_POS,
-				NO_X_POS + YES_NO_WIDTH,
-				YES_NO_Y_POS + YES_NO_HEIGHT
-			};
-			mspYesButtonImg->SizedDraw(yesRect);
-			mspNoButtonImg->SizedDraw(noRect);
-		}
+		D2D1_RECT_F noRect{
+			NO_X_POS,
+			YES_NO_Y_POS,
+			NO_X_POS + YES_NO_WIDTH,
+			YES_NO_Y_POS + YES_NO_HEIGHT
+		};
+		mspYesButtonImg->SizedDraw(yesRect);
+		mspNoButtonImg->SizedDraw(noRect);
+		
 	}
 
 	bool YesNoGameMessageBox::IsYesClicked(float mouseX, float mouseY)
 	{
-		if (!mBIsYesClicked)
+		float xPos = mspYesButtonImg->GetPosition().x;
+		float yPos = mspYesButtonImg->GetPosition().y;
+		if (mouseX >= xPos && mouseX <= xPos + YES_NO_WIDTH &&
+			mouseY >= yPos && mouseY <= yPos + YES_NO_HEIGHT)
 		{
-			float xPos = mspYesButtonImg->GetPosition().x;
-			float yPos = mspYesButtonImg->GetPosition().y;
-			if (mouseX >= xPos && mouseX <= xPos + YES_NO_WIDTH &&
-				mouseY >= yPos && mouseY <= yPos + YES_NO_HEIGHT)
-			{
-				mBIsYesClicked = true;
-				return true;
-			}
-			return false;
+			return true;
 		}
 		return false;
+	
 	}
 
 	bool YesNoGameMessageBox::IsNoClicked(float mouseX, float mouseY)
 	{
-		if (!mBIsYesClicked)
+
+		float xPos = mspNoButtonImg->GetPosition().x;
+		float yPos = mspNoButtonImg->GetPosition().y;
+		if (mouseX >= xPos && mouseX <= xPos + YES_NO_WIDTH &&
+			mouseY >= yPos && mouseY <= yPos + YES_NO_HEIGHT)
 		{
-			float xPos = mspNoButtonImg->GetPosition().x;
-			float yPos = mspNoButtonImg->GetPosition().y;
-			if (mouseX >= xPos && mouseX <= xPos + YES_NO_WIDTH &&
-				mouseY >= yPos && mouseY <= yPos + YES_NO_HEIGHT)
-			{
-				return true;
-			}
-			return false;
+			return true;
 		}
 		return false;
-	}
 
-	void YesNoGameMessageBox::Refresh()
-	{
-		mBIsYesClicked = false;
 	}
 
 	void YesNoGameMessageBox::SetText(std::wstring text)
 	{
 		mText = text;
+	}
+
+	std::wstring YesNoGameMessageBox::GetText() const
+	{
+		return mText;
 	}
 
 

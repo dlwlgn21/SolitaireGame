@@ -67,7 +67,7 @@ namespace solitaire
 		void releaseAndInitCard();
 		inline int getLeftGameLevel() const;
 		HRESULT createDeviceIndependentResources();
-
+		void clearCardList();
 	
 	private:
 		std::unique_ptr<Actor> mspBackground;
@@ -83,6 +83,7 @@ namespace solitaire
 		int mCurGameLevel{};
 		int mLeftTrialCount{};
 		bool mBIsEnteredGame = false;
+		bool mBIsEnteredContinue = false;
 	};
 }
 

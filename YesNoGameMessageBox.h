@@ -18,7 +18,7 @@ namespace solitaire
         const float YES_NO_HEIGHT = 100.f;
 
         const float DRAW_RECT_X_POS = 350.f;
-        const float DRAW_RECT_Y_POS = 320.f;
+        const float DRAW_RECT_Y_POS = 280.f;
         const float DRAW_RECT_WIDTH = 300.f;
         const float DRAW_RECT_HEIGHT = 150.f;
 
@@ -30,13 +30,13 @@ namespace solitaire
         virtual bool IsYesClicked(float mouseX, float mouseY);
         virtual bool IsNoClicked(float mouseX, float mouseY);
 
-        void Refresh();
         void SetText(std::wstring text);
+        std::wstring GetText() const;
+
     private:
         std::wstring mText;
         std::unique_ptr<Actor> mspYesButtonImg;
         std::unique_ptr<Actor> mspNoButtonImg;
-        bool mBIsYesClicked = false;
     };
 }
 

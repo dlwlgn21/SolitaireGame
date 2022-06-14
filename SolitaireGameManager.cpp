@@ -14,7 +14,7 @@ namespace solitaire
 		mspBackground = std::make_unique<Actor>(this, BACKGROUND_FILENAME2);
 		createDeviceIndependentResources();
 		mspGameMenu = std::make_unique<GameMenu>(this);
-		mspMSGBox = std::make_unique<YesNoGameMessageBox>(this, L"Data/BlueBorder.png", L"Continue?");
+		mspMSGBox = std::make_unique<YesNoGameMessageBox>(this, L"Data/BlueBorder.png", L"go to Next level?");
 		mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);;
 
 		return S_OK;
@@ -38,23 +38,8 @@ namespace solitaire
 	{
 		if (mLeftTrialCount <= 0)
 		{
-			int userChoice = MessageBoxA(
-				mHwnd,
-				"Do you wnanna play Again?",
-				"GAME OVER",
-				MB_ICONEXCLAMATION | MB_OKCANCEL
-			);
-
-			if (userChoice == IDOK)
-			{
-				mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);
-				releaseAndInitCard();
-				return;
-			}
-			else
-			{
-				DestroyWindow(mHwnd);
-			}
+			mBIsEnteredContinue = true;
+			mspMSGBox->SetText(L"wanna play Again?");
 		}
 
 		HRESULT hr;
@@ -66,7 +51,11 @@ namespace solitaire
 		else
 		{
 			mspBackground->Draw();
-			
+			if (mBIsEnteredContinue)
+			{
+				mspMSGBox->Draw();
+			}
+
 			for (auto& e : mCardList)
 			{
 				e->Draw();
@@ -131,15 +120,31 @@ namespace solitaire
 				return;
 			}
 		}
+		if (mBIsEnteredContinue)
+		{
+			clearCardList();
+			Render();
+			if (mspMSGBox->IsYesClicked(mouseX, mouseY))
+			{
+				if (mspMSGBox->GetText() == L"wanna play Again?")
+				{
 
-		// Message Box Section
-		if (mspMSGBox->IsYesClicked(mouseX, mouseY))
-		{
-		
-		}
-		if (mspMSGBox->IsNoClicked(mouseX, mouseY))
-		{
-			DestroyWindow(mHwnd);
+					mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);
+					releaseAndInitCard();
+					mBIsEnteredContinue = false;
+				}
+				else
+				{
+					++mCurGameLevel;
+					mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);
+					releaseAndInitCard();
+					mBIsEnteredContinue = false;
+				}
+			}
+			else if (mspMSGBox->IsNoClicked(mouseX, mouseY))
+			{
+				DestroyWindow(mHwnd);
+			}
 		}
 
 		Card* pCurCard = nullptr;
@@ -178,19 +183,7 @@ namespace solitaire
 							MessageBoxA(mHwnd, "ALL LEVEL CLEAER!!!", "CLEAR", MB_OK);
 							DestroyWindow(mHwnd);
 						}
-						int userChoice;
-						userChoice = MessageBoxA(mHwnd, "Do you wanna go to Next level?", "CLEAR", MB_OKCANCEL);
-						if (userChoice == IDOK)
-						{
-							++mCurGameLevel;
-							mLeftTrialCount = FIRST_GAME_LEVEL_TRIAL_COUNT - (mCurGameLevel * SUBTRACT_COUNT);
-							releaseAndInitCard();
-							return;
-						}
-						else
-						{
-							DestroyWindow(mHwnd);
-						}
+						mBIsEnteredContinue = true;
 					}
 				}
 				else
@@ -285,6 +278,15 @@ namespace solitaire
 		mspRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::MediumSpringGreen), mcpBrush.GetAddressOf());
 		
 		return S_OK;
+	}
+
+	void SolitaireGameManager::clearCardList()
+	{
+		for (auto& e : mCardList)
+		{
+			e.reset();
+		}
+		mCardList.clear();
 	}
 
 	int SolitaireGameManager::getLeftGameLevel() const
